@@ -4,3 +4,68 @@ author: "Suhani Shah"
 format: html
 ---
 
+```{r}
+#| echo: false
+#| message: false
+library(tidyverse)
+library(palmerpenguins)
+```
+
+
+```{r}
+#| echo: false
+penguins
+```
+
+
+```{r}
+# Install packages if you haven't already
+# install.packages(c("tidyverse", "palmerpenguins"))
+
+library(tidyverse)
+library(palmerpenguins)
+
+# Clean the data by removing missing values in key dimensions
+penguins_clean <- penguins %>%
+  drop_na(bill_length_mm, flipper_length_mm, species)
+
+# Create a beautiful visualization
+ggplot(data = penguins_clean, 
+       aes(x = flipper_length_mm, 
+           y = bill_length_mm, 
+           color = species, 
+           shape = species)) +
+  # Add points with transparency to handle slight overlap
+  geom_point(size = 3.5, alpha = 0.75) +
+  # Add linear trend lines for each species
+  geom_smooth(method = "lm", se = FALSE, formula = y ~ x, linewidth = 1.2, show.legend = FALSE) +
+  # Use custom hex colors matching standard palmerpenguins branding
+  scale_color_manual(values = c("Adelie" = "darkorange", 
+                                "Chinstrap" = "purple", 
+                                "Gentoo" = "cyan4")) +
+  # Clean up labels and text hierarchy
+  labs(
+    title = "Penguin Bill Length vs. Flipper Length",
+    subtitle = "Dimensions for Adelie, Chinstrap, and Gentoo Penguins at Palmer Station",
+    x = "Flipper Length (mm)",
+    y = "Bill Length (mm)",
+    color = "Species",
+    shape = "Species",
+    caption = "Data Source: palmerpenguins R Package"
+  ) +
+  # Apply a minimalist foundational theme
+  theme_minimal(base_size = 14) +
+  # Fine-tune specific aesthetic layout properties
+  theme(
+    plot.title = element_text(face = "bold", size = 18, color = "#1a1a1a", margin = margin(b = 6)),
+    plot.subtitle = element_text(size = 12, color = "#555555", margin = margin(b = 20)),
+    plot.caption = element_text(size = 9, color = "#888888", hjust = 1, margin = margin(t = 20)),
+    legend.position = "top",
+    legend.background = element_rect(fill = "white", color = NA),
+    panel.grid.minor = element_blank(),
+    panel.grid.major = element_line(color = "#ebebeb"),
+    axis.title.x = element_text(margin = margin(t = 12), face = "bold", size = 11, color = "#333333"),
+    axis.title.y = element_text(margin = margin(r = 12), face = "bold", size = 11, color = "#333333")
+  )
+
+```
